@@ -4,22 +4,28 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Deal',
+            name="Deal",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('customer', models.CharField(max_length=512)),
-                ('item', models.CharField(max_length=512)),
-                ('total', models.PositiveIntegerField()),
-                ('quantity', models.PositiveIntegerField()),
-                ('date', models.DateTimeField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("customer", models.CharField(max_length=512)),
+                ("item", models.CharField(max_length=512)),
+                ("total", models.PositiveIntegerField()),
+                ("quantity", models.PositiveIntegerField()),
+                ("date", models.DateTimeField()),
             ],
         ),
     ]
