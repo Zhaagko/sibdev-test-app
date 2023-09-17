@@ -3,7 +3,6 @@ from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import Deal
 from .repository import bulk_create_deals, get_top_spending_customers
 from .serializers import (
     DealLoadSerializer,

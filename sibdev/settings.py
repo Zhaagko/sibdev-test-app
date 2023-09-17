@@ -90,13 +90,15 @@ DATABASES = {
     }
 }
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-#         "LOCATION": "/var/tmp/django_cache",
-#         "TIMEOUT": 60,
-#     }
-# }
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": "/var/tmp/django_cache",
+        "TIMEOUT": 60,
+    }
+}
+
+TOP_SPENDING_CUSTOMERS_CACHE_KEY = "TopSpendingCustomers"
 
 
 # Password validation
