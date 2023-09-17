@@ -4,26 +4,40 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import Deal
-from .serializers import DealSerializer, get_validated_deals_list
+from .repository import bulk_create_deals, get_top_spending_customers
+from .serializers import (
+    DealLoadSerializer,
+    DealTopSpendingCustomerSerializer,
+)
 from .utils import deserialize_uploaded_csv_file
+from .enums import ApiStatusEnum
 
 
 class DealViewSet(CreateModelMixin, GenericViewSet):
-    queryset = Deal.objects.none()
-    serializer_class = DealSerializer
-
     def create(self, request, *args, **kwargs) -> Response:
         uploaded_file = request.FILES.get("deals")
 
         if not uploaded_file:
             return Response(
                 status=status.HTTP_400_BAD_REQUEST,
-                data={"message": "You should pass the deals file."},
+                data={
+                    "Status": ApiStatusEnum.ERROR.value,
+                    "Desc": f"Запрос должен содержать файл deals.",
+                },
             )
 
         deals_list = deserialize_uploaded_csv_file(uploaded_file)
-        validated_list = get_validated_deals_list(deals_list, self.serializer_class)
+        validated_list = DealLoadSerializer.get_validated_deals_list(deals_list)
+        bulk_create_deals(validated_list)
+        return Response(
+            status=status.HTTP_201_CREATED, data={"status": ApiStatusEnum.OK.value}
+        )
 
-        Deal.objects.bulk_create(validated_list)
-
-        return Response(status=status.HTTP_201_CREATED, data={"status": "OK"})
+    def list(self, *args, **kwargs) -> Response:
+        result = get_top_spending_customers()
+        serializer = DealTopSpendingCustomerSerializer(data=result, many=True)
+        serializer.is_valid()
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"status": ApiStatusEnum.OK.value, "result": serializer.data},
+        )
