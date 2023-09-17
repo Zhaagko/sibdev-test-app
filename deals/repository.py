@@ -70,12 +70,8 @@ def get_top_spending_customers_from_db(limit: int) -> list[Deal]:
 
 def get_top_spending_customers(limit: int = 5) -> list[Deal]:
     cached_result = get_top_spending_customers_from_cache(limit)
-
     if not cached_result:
         db_result = get_top_spending_customers_from_db(limit)
         load_top_spending_customers_to_cache(db_result)
-        print("GET from DB")
         return db_result
-
-    print("GET from CACHE")
     return cached_result
